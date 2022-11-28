@@ -8,11 +8,9 @@ const Input = () => {
       <input type="text" placeholder="Type something..." />
       <div className="send">
         <IoMdAttach/>
-        <img src="" alt="" />
         <input type="file" style={{ display: "none" }} id="file" />
         <label htmlFor="file">
-          <RiImageAddLine/>
-          <img src="" alt="" />
+          <RiImageAddLine/> 
         </label>
         <button>Send</button>
       </div>
