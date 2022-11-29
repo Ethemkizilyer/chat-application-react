@@ -9,9 +9,7 @@ In the project directory, you can run:
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [chat-application-react-sandy.vercel.app
-](chat-application-react-sandy.vercel.app/
-) to view it in your browser.
+Open [chat-application-react-sandy.vercel.app](chat-application-react-sandy.vercel.app) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
