@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import React, { useContext, useState } from "react";
 import { Context } from "../context/AuthContext";
+import { ChatContext } from "../context/ChatContext";
 import { db } from "../firebase";
 
 const Search = () => {
@@ -19,6 +20,7 @@ const Search = () => {
   const [err, setErr] = useState(false);
 
   const { currentUser } = useContext(Context);
+   const { dispatch } = useContext(ChatContext);
 
   const handleSearch = async () => {
     const q = query(
@@ -31,11 +33,13 @@ const Search = () => {
       querySnapshot.forEach((doc) => {
         console.log(doc.id, "=>", doc.data());
         setUser(doc.data());
+        dispatch({ type: "CHANGE_USER", payload: doc.data() });
       });
     } catch (err) {
       console.log(err.message);
       setErr(true);
     }
+
   };
 
   const handleKey = (e) => {
