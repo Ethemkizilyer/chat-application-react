@@ -70,6 +70,7 @@ const Input = () => {
         type="text"
         placeholder="Type something..."
         onChange={(e) => setText(e.target.value)}
+        value={text}
       />
       <div className="send">
         <IoMdAttach />
