@@ -11,8 +11,8 @@ const Chats = () => {
   useEffect(()=> {
     const getChats=()=>{
     const unsub=onSnapshot(doc(db,"userChats",currentUser?.uid),(doc)=> {
-      setchats(doc.data())
-      // console.log("Current data:",doc.data())
+      setchats(doc?.data())
+      console.log("Current data:",doc?.data())
     })
 
    
@@ -21,7 +21,8 @@ const Chats = () => {
     };} 
     currentUser.uid && getChats()
   },[currentUser?.uid])
-  console.log(Object.entries(chats));
+  console.log(Object?.entries(chats));
+  // console.log(chats);
 
 const handleSelect=(u)=>{
   dispatch({type:"CHANGE_USER",payload:u})
@@ -29,7 +30,7 @@ const handleSelect=(u)=>{
 
   return (
     <div className="chats">
-      {Object.entries(chats)?.sort((a,b)=>b[1].date-a[1].date).map((chat) => (
+      {Object?.entries(chats)?.sort((a,b)=>b[1].date-a[1].date).map((chat) => (
         <div className="userChat" key={chat[0]} onClick={()=>handleSelect(chat[1]?.userInfo)}>
           <img src={chat[1]?.userInfo.photoURL} alt="" />
           <div className="userChatInfo">

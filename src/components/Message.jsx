@@ -16,7 +16,7 @@ const Message = ({ message }) => {
   },[message])
 
   let asd= String(new Date(message.date.seconds * 1000)).split(" ");
-  console.log(asd[2], asd[1], asd[0], asd[4]);
+  // console.log(asd[2], asd[1], asd[0], asd[4]);
 
   return (
     <div
@@ -31,7 +31,7 @@ const Message = ({ message }) => {
           }
           alt=""
         />
-        <span>{asd[4].slice(0,5)}</span>
+        <span>{asd[4]?.slice(0,5)}</span>
       </div>
       <div className="messageContent">
         <p>{message.text}</p>
