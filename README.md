@@ -10,7 +10,7 @@ In the project directory, you can run:
 
 Runs the app in the development mode.\
 Open [chat-application-react-sandy.vercel.app
-](chat-application-react-sandy.vercel.app
+](chat-application-react-sandy.vercel.app/
 ) to view it in your browser.
 
 The page will reload when you make changes.\
