@@ -1,10 +1,12 @@
 import { signOut } from 'firebase/auth';
 import React, { useContext } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Context } from '../context/AuthContext';
 import { auth } from '../firebase';
 
 const Navbar = () => {
   const  {currentUser}=useContext(Context)
+  const navigate=useNavigate()
   return (
     <div className="navbar">
       <span className="logo">Bakar Chat</span>
@@ -16,7 +18,9 @@ const Navbar = () => {
           alt=""
         />
         <span>{currentUser?.displayName}</span>
-        <button onClick={()=>signOut(auth)}>Logout</button>
+        <button onClick={()=>{
+          navigate("/login")
+          signOut(auth)}}>Logout</button>
       </div>
     </div>
   );
