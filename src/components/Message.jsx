@@ -8,11 +8,11 @@ const Message = ({ message }) => {
   const { currentUser } = useContext(Context);
   const { data } = useContext(ChatContext);
 
-  const ref=useRef()
+  let ref=useRef()
 
   useEffect(()=>{
-    ref.current?.scrollIntoView({behavior:"smooth"})
-
+    
+    ref.current?.scrollIntoView({ behavior: "smooth", inline: "center" });
   },[message])
 
   let asd= String(new Date(message.date.seconds * 1000)).split(" ");
