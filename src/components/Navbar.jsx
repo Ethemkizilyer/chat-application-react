@@ -13,11 +13,11 @@ const Navbar = () => {
       <div className="user">
         <img
           src=
-            {currentUser?.photoURL}
+            {currentUser?.avatar}
           
           alt=""
         />
-        <span>{currentUser?.displayName}</span>
+        <span>{currentUser?.username}</span>
         <button onClick={()=>{
           navigate("/login")
           signOut(auth)}}>Logout</button>

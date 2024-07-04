@@ -25,9 +25,10 @@ const Search = () => {
   const handleSearch = async () => {
     const q = query(
       collection(db, "users"),
-      where("displayName", "==", username)
+      where("username", "==", username)
     );
-
+    const asd = await getDocs(q);
+console.log(asd)
     try {
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
@@ -49,9 +50,9 @@ const Search = () => {
   const handleSelect = async () => {
     // group mesajı firestore da var mı yok mu kontrol için eğer yoksa 1 tane oluştur
     const combinedId =
-      currentUser.uid > user.uid
-        ? currentUser.uid + user.uid
-        : user.uid + currentUser.uid;
+      currentUser.id > user.id
+        ? currentUser.id + user.id
+        : user.uid + currentUser.id;
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
 
@@ -60,21 +61,21 @@ const Search = () => {
         await setDoc(doc(db, "chats", combinedId), { messages: [] });
 
         //Kullanıcı sohbetleri oluşturulacak
-        await updateDoc(doc(db, "userChats", currentUser.uid), {
+        await updateDoc(doc(db, "userchats", currentUser.id), {
           [combinedId + ".userInfo"]: {
-            uid: user.uid,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
+            id: user.id,
+            username: user.username,
+            avatar: user.avatar,
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
 
         //Buda diğer kullanıcı için
-        await updateDoc(doc(db, "userChats", user.uid), {
+        await updateDoc(doc(db, "userchats", user.id), {
           [combinedId + ".userInfo"]: {
-            uid: currentUser.uid,
-            displayName: currentUser.displayName,
-            photoURL: currentUser.photoURL,
+            id: currentUser.id,
+            displayName: currentUser.username,
+            avatar: currentUser.avatar,
           },
           [combinedId + ".date"]: serverTimestamp(),
         });
@@ -100,9 +101,9 @@ const Search = () => {
       {err && <span>User not found</span>}
       {user && (
         <div className="userChat" onClick={handleSelect}>
-          <img src={user?.photoURL} alt="" />
+          <img src={user?.avatar} alt="" />
           <div className="userChatInfo">
-            <span>{user?.displayName}</span>
+            <span>{user?.username}</span>
           </div>
         </div>
       )}

@@ -14,7 +14,7 @@ const Input = () => {
   const [img, setImg] = useState(null);
   const { currentUser } = useContext(Context);
   const { data } = useContext(ChatContext);
-
+console.log(data)
   const handleSend = async () => {
     if (img) {
       const storageRef = ref(storage, uuid());
@@ -30,7 +30,7 @@ const Input = () => {
               messages: arrayUnion({
                 id: uuid(),
                 text,
-                senderId: currentUser.uid,
+                senderId: currentUser.id,
                 date: Timestamp.now(),
                 img: downloadURL,
               }),
@@ -43,19 +43,19 @@ const Input = () => {
         messages: arrayUnion({
           id: uuid(),
           text,
-          senderId: currentUser.uid,
+          senderId: currentUser.id,
           date: Timestamp.now(),
         }),
       });
     }
 
-    await updateDoc(doc(db,"userChats",currentUser.uid),{
+    await updateDoc(doc(db,"userchats",currentUser.id),{
       [data.chatId + ".lastMessage"]:{
         text
       },
       [data.chatId+".date"]:serverTimestamp()
     })
-    await updateDoc(doc(db,"userChats",data.user.uid),{
+    await updateDoc(doc(db,"userchats",data.user.uid),{
       [data.chatId + ".lastMessage"]:{
         text
       },

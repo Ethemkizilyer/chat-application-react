@@ -20,14 +20,14 @@ const Message = ({ message }) => {
 
   return (
     <div
-      className={`message ${message.senderId === currentUser.uid && "owner"}`}
+      className={`message ${message.senderId === currentUser.id && "owner"}`}
     >
       <div className="messageInfo">
         <img
           src={
             message.senderId === currentUser.uid
-              ? currentUser.photoURL
-              : data.user.photoURL
+              ? currentUser.avatar
+              : data.user.avatar
           }
           alt=""
         />

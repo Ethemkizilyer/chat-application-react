@@ -1,11 +1,14 @@
-import React, { useContext } from 'react'
+import React, { useContext,useEffect } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import { Context } from '../context/AuthContext'
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from '../firebase'
 
 const PrivateRouter = () => {
     const {currentUser}= useContext(Context)
+    console.log("currentUser",currentUser)
 
-return currentUser.displayName ? <Outlet /> : <Navigate to="/login" />;
+return currentUser.username ? <Outlet /> : <Navigate to="/login" />;
 
 }
 

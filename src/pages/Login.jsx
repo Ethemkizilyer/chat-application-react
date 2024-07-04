@@ -8,20 +8,38 @@ import { auth } from "../firebase";
 const Login = () => {
     const [err, setErr] = useState(false);
   const navigate= useNavigate()
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-const handleSubmit=async(e)=>{
-  e.preventDefault()
-  try{
-    const user= await signInWithEmailAndPassword(auth,loginEmail,loginPassword);
-    navigate(-1)
-    alert("Hoşgeldin")
-  } catch(err){
-    // alert(err.message)
-    setErr(true)
-  }
-}
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const res= await signInWithEmailAndPassword(auth, email, password)
+        .then((user) => {
+          console.log("user",user)
+        navigate("/");
+        alert("Hoşgeldin")
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          console.log(errorCode);
+
+          if (errorCode === 'auth/user-not-found') {
+            console.log("Account doesn't exist.");
+          } else if (errorCode === 'auth/wrong-password') {
+            console.log('Invalid password.');
+          } else {
+            console.log('Something went wrong.');
+          }
+        })
+        .finally(() => {
+          console.log(false);
+        });
+    } catch (err) {
+        console.error(err.code, err.message);
+        setErr(true);
+    }
+};
 
 
 
@@ -34,14 +52,14 @@ const handleSubmit=async(e)=>{
           <input
             type="email"
             placeholder="email"
-            value={loginEmail}
-            onChange={(e) => setLoginEmail(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <input
             type="password"
             placeholder="password"
-            value={loginPassword}
-            onChange={(e) => setLoginPassword(e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
           <button onClick={handleSubmit}>Sign in</button>
