@@ -32,7 +32,7 @@ delete chats?.chats
         <div className="userChat" key={chat[0]} onClick={()=>handleSelect(chat[1]?.userInfo)}>
           <img src={chat[1]?.userInfo.avatar} alt="" />
           <div className="userChatInfo">
-            <span>{chat[1]?.userInfo.username}</span>
+            <span>{chat[1]?.userInfo?.username || chat[1]?.userInfo?.displayName}</span>
             <p>{chat[1]?.lastMessage?.text}</p>
           </div>
         </div>

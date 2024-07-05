@@ -52,7 +52,7 @@ console.log(asd)
     const combinedId =
       currentUser.id > user.id
         ? currentUser.id + user.id
-        : user.uid + currentUser.id;
+        : user.id + currentUser.id;
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
 
@@ -74,7 +74,7 @@ console.log(asd)
         await updateDoc(doc(db, "userchats", user.id), {
           [combinedId + ".userInfo"]: {
             id: currentUser.id,
-            displayName: currentUser.username,
+            username: currentUser.username,
             avatar: currentUser.avatar,
           },
           [combinedId + ".date"]: serverTimestamp(),
