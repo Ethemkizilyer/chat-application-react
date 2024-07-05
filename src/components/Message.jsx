@@ -15,7 +15,7 @@ const Message = ({ message }) => {
     ref.current?.scrollIntoView({ behavior: "smooth", inline: "center" });
   },[message])
 
-  let asd= String(new Date(message.date.seconds * 1000)).split(" ");
+  let asd= String(new Date(message.createdAt.seconds * 1000)).split(" ");
   // console.log(asd[2], asd[1], asd[0], asd[4]);
 
   return (
@@ -25,7 +25,7 @@ const Message = ({ message }) => {
       <div className="messageInfo">
         <img
           src={
-            message.senderId === currentUser.uid
+            message.senderId === currentUser.id
               ? currentUser.avatar
               : data.user.avatar
           }

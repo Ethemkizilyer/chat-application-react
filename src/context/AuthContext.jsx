@@ -18,7 +18,6 @@ export const ContextProvider=({children})=>{
               setCurrentUser(docSnap.data());  
             }
             
-            console.log(user)
         })
         
     },[])

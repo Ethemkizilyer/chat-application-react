@@ -13,10 +13,10 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     try {
-        const res= await signInWithEmailAndPassword(auth, email, password)
+        await signInWithEmailAndPassword(auth, email, password)
         .then((user) => {
-          console.log("user",user)
         navigate("/");
         alert("Hoşgeldin")
         })

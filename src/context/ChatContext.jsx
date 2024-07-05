@@ -18,7 +18,7 @@ console.log(currentUser)
                 return {
                     user:action.payload,
                     chatId:
-                    currentUser.id > action.payload.uid ? currentUser.id + action.payload.uid : action.payload.uid + currentUser.id,
+                    currentUser.id > action.payload.id ? currentUser.id + action.payload.id : action.payload.id + currentUser.id,
                 };
 
                 default:

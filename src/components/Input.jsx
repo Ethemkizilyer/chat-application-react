@@ -1,5 +1,5 @@
 import { uuidv4 } from "@firebase/util";
-import { arrayUnion, doc, serverTimestamp, Timestamp, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, getDoc, serverTimestamp, Timestamp, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import React, { useContext, useState } from "react";
 import { IoMdAttach } from "react-icons/io";
@@ -28,11 +28,9 @@ console.log(data)
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
             await updateDoc(doc(db, "chats", data.chatId), {
               messages: arrayUnion({
-                id: uuid(),
-                text,
                 senderId: currentUser.id,
-                date: Timestamp.now(),
-                img: downloadURL,
+                createdAt: new Date(),
+                ...(img && { img: img }),
               }),
             });
           });
@@ -41,28 +39,44 @@ console.log(data)
     } else {
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
-          id: uuid(),
-          text,
           senderId: currentUser.id,
-          date: Timestamp.now(),
+          text,
+          createdAt: new Date(),
         }),
       });
+      const userIDs = [currentUser.id, data.user.id];
+      userIDs.forEach(async (id) => {
+        const userChatsRef = doc(db, "userchats", id);
+        const userChatsSnapshot = await getDoc(userChatsRef);
+
+        if (userChatsSnapshot.exists()) {
+          const userChatsData = userChatsSnapshot.data();
+
+          const chatIndex = userChatsData.chats.findIndex(
+            (c) => c.chatId === data.chatId
+          );
+
+          userChatsData.chats[chatIndex].lastMessage = text;
+          userChatsData.chats[chatIndex].isSeen =
+            id === currentUser.id ? true : false;
+          userChatsData.chats[chatIndex].updatedAt = Date.now();
+
+          await updateDoc(userChatsRef, {
+            chats: userChatsData.chats,
+          });
+        }
+      })
     }
 
-    await updateDoc(doc(db,"userchats",currentUser.id),{
-      [data.chatId + ".lastMessage"]:{
-        text
-      },
-      [data.chatId+".date"]:serverTimestamp()
-    })
-    await updateDoc(doc(db,"userchats",data.user.uid),{
-      [data.chatId + ".lastMessage"]:{
-        text
-      },
-      [data.chatId+".date"]:serverTimestamp()
-    })
+    
     setText("")
     setImg(null)
+  };
+  
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSend();
+    }
   };
   return (
     <div className="input">
@@ -71,6 +85,7 @@ console.log(data)
         placeholder="Type something..."
         onChange={(e) => setText(e.target.value)}
         value={text}
+        onKeyDown={handleKeyPress}
       />
       <div className="send">
         <IoMdAttach />

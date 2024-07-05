@@ -4,7 +4,7 @@ import { BiImageAdd } from "react-icons/bi";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { Link, useNavigate } from "react-router-dom";
 import upload from "../upload";
 
@@ -37,14 +37,22 @@ const Register = () => {
 
     const {username,email,password}=Object.fromEntries(formData)
     console.log(username)
+
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("username", "==", username));
+    const querySnapshot = await getDocs(q);
+
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
 
-      const imgUrl = await upload(avatar.file)
+      let imgUrl = null;
+      if (avatar.file) {
+        imgUrl = await upload(avatar.file);
+      }
       await setDoc(doc(db,"users",res.user.uid),{
         username,
         email,
-        avatar:imgUrl,
+        ...(imgUrl && { avatar: imgUrl }),
         id:res.user.uid,
 
       })
