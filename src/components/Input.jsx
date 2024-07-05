@@ -8,34 +8,45 @@ import { Context } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 import { db, storage } from "../firebase";
 import { v4 as uuid } from "uuid";
+import upload from "../upload";
 
 const Input = () => {
   const [text, setText] = useState("");
-  const [img, setImg] = useState(null);
+  const [img, setImg] = useState({
+    file: null,
+    url: "",
+  });
   const { currentUser } = useContext(Context);
   const { data } = useContext(ChatContext);
 console.log(data)
-  const handleSend = async () => {
-    if (img) {
-      const storageRef = ref(storage, uuid());
-      const uploadTask = uploadBytesResumable(storageRef, img);
 
-      uploadTask.on(
-        (error) => {
-          // setErr(true);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+const handleImg = (e) => {
+  console.log("img", e.target.files);
+    if (e.target.files[0]) {
+      setImg({
+        file: e.target.files[0],
+        url: URL.createObjectURL(e.target.files[0]),
+      });
+      console.log("Image selected: ", e.target.files[0]);
+    } else {
+      console.log("No file selected");
+    }
+};
+console.log("img",img)
+  const handleSend = async () => {
+    let imgUrl = null;
+    if (img.file) {
+      imgUrl = await upload(img.file);
+          
             await updateDoc(doc(db, "chats", data.chatId), {
               messages: arrayUnion({
                 senderId: currentUser.id,
                 createdAt: new Date(),
-                ...(img && { img: img }),
+                ...(imgUrl && { img: imgUrl }),
               }),
             });
-          });
-        }
-      );
+          
+      
     } else {
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
@@ -70,7 +81,10 @@ console.log(data)
 
     
     setText("")
-    setImg(null)
+    setImg({
+      file: null,
+      url: "",
+    });
   };
   
   const handleKeyPress = (e) => {
@@ -90,14 +104,16 @@ console.log(data)
       <div className="send">
         <IoMdAttach />
         <input
-          type="file"
-          style={{ display: "none" }}
-          id="file"
-          onChange={(e) => setImg(e.target.files[0])}
-        />
-        <label htmlFor="file">
-          <RiImageAddLine />
-        </label>
+        type="file"
+        id="file"
+        accept="image/*"
+        style={{ display: "none" }}
+        onChange={handleImg}
+      />
+      <label htmlFor="file">
+        <RiImageAddLine />
+      </label>
+      {img.url && <img width="50px" height="50px" style={{width:"30px",height:"30px"}} src={img.url} alt="Selected" />}
         <button onClick={handleSend}>Send</button>
       </div>
     </div>
