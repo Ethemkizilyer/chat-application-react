@@ -13,7 +13,6 @@ const Chats = () => {
       setchats(res?.data())
       console.log("Current data:",res?.data())
     })
-console.log(unsub())
    
     return ()=> {
       unsub();
@@ -26,7 +25,7 @@ console.log(unsub())
 const handleSelect=(u)=>{
   dispatch({type:"CHANGE_USER",payload:u})
 }
-
+delete chats?.chats
   return (
     <div className="chats">
       {Object?.entries(chats)?.sort((a,b)=>b[1].date-a[1]?.date)?.map((chat) => (
